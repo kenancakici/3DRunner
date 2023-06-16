@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float runninSpeed;
+    public float runningSpeed;
     float touchXDelta = 0;
     float newX = 0;
     public float xSpeed;
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Player yeni hesaplanan newX koordinatýnda, verilen hýz ve zamana göre Z yönünde ileriye hareket ediyor.
-        Vector3 newPosition = new Vector3(newX, transform.position.y, transform.position.z + runninSpeed * Time.deltaTime);
+        Vector3 newPosition = new Vector3(newX, transform.position.y, transform.position.z + runningSpeed * Time.deltaTime);
         transform.position = newPosition;
     }
 }

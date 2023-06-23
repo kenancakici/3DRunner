@@ -9,6 +9,14 @@ public class CheckCollisions : MonoBehaviour
     public int score;
     public TextMeshProUGUI CoinText;
     public PlayerController playerController;
+    Vector3  PlayerStartPos;
+    public GameObject speedBoosterIcon;
+    //private InGameRanking ig;
+
+    private void Start()
+    {
+        PlayerStartPos = new Vector3( transform.position.x,transform.position.y,transform.position.z);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -21,22 +29,47 @@ public class CheckCollisions : MonoBehaviour
         else if (other.CompareTag("End"))
         {
             Debug.Log("Bravoooo Baþardýn....!!!");
-            playerController.runningSpeed = 0;
+            PlayerFinished();
 
+
+
+        }
+
+        if (other.CompareTag("speedboost"))
+        {
+            playerController.runningSpeed = playerController.runningSpeed + 3f;
+            speedBoosterIcon.SetActive(true);
+            StartCoroutine(SlowAfterWhileContinue());
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Collision"))
+        if (collision.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Çarpýþma oldu.....");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            transform.position = PlayerStartPos;
         }
     }
 
+    private void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
+    }
 
+    private IEnumerator SlowAfterWhileContinue()
+    {
+        yield return new WaitForSeconds(2.0f);
+        playerController.runningSpeed = playerController.runningSpeed - 3f;
+        speedBoosterIcon.SetActive(false);
+    }
+
+    void PlayerFinished()
+    {
+        playerController.runningSpeed = 0f;
+        transform.Rotate(transform.rotation.x, 180, transform.rotation.y, Space.Self);
+    }
 
 
     public void AddCoin()

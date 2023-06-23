@@ -7,6 +7,8 @@ TagManager:
   - Coin
   - Collision
   - End
+  - Obstacle
+  - speedboost
   layers:
   - Default
   - TransparentFX

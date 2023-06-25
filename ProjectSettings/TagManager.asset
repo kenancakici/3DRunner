@@ -9,6 +9,7 @@ TagManager:
   - End
   - Obstacle
   - speedboost
+  - Runner
   layers:
   - Default
   - TransparentFX

@@ -1,81 +1,85 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using TMPro;
 
 public class CheckCollisions : MonoBehaviour
 {
     public int score;
     public TextMeshProUGUI CoinText;
+
+    // Added new codes
     public PlayerController playerController;
-    Vector3  PlayerStartPos;
+    Vector3 PlayerStartPos;
     public GameObject speedBoosterIcon;
-    //private InGameRanking ig;
+    private InGameRanking ig;
+
 
     private void Start()
     {
-        PlayerStartPos = new Vector3( transform.position.x,transform.position.y,transform.position.z);
+        PlayerStartPos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        speedBoosterIcon.SetActive(false);
+        ig = FindObjectOfType<InGameRanking>();
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Coin"))
         {
+            //Debug.Log("Coin collected!..");
             AddCoin();
-            //Destroy(other.gameObject); // Coin siliniyor
+            //Destroy(other.gameObject);
             other.gameObject.SetActive(false);
         }
-        else if (other.CompareTag("End"))
+        else if (other.CompareTag("Finish"))
         {
-            Debug.Log("Bravoooo Baþardýn....!!!");
             PlayerFinished();
-
-
+            if (ig.namesTxt[6].text == "Player")
+            {
+                Debug.Log("Congrats!..");
+            }
+            else
+            {
+                Debug.Log("You Lose!..");
+            }
 
         }
-
-        if (other.CompareTag("speedboost"))
+        else if (other.CompareTag("speedboost"))
         {
             playerController.runningSpeed = playerController.runningSpeed + 3f;
             speedBoosterIcon.SetActive(true);
-            StartCoroutine(SlowAfterWhileContinue());
+            StartCoroutine(SlowAfterAWhileCoroutine());
         }
+    }
+
+    void PlayerFinished()
+    {
+        playerController.runningSpeed = 0f;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
-            Debug.Log("Çarpýþma oldu.....");
+            //Debug.Log("Touched Obstacle!..");
+            // Added new codes
             transform.position = PlayerStartPos;
         }
     }
 
-    private void RestartGame()
+    public void AddCoin()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
+        score++;
+        CoinText.text = "Score: " + score.ToString();
     }
 
-    private IEnumerator SlowAfterWhileContinue()
+    private IEnumerator SlowAfterAWhileCoroutine()
     {
         yield return new WaitForSeconds(2.0f);
         playerController.runningSpeed = playerController.runningSpeed - 3f;
         speedBoosterIcon.SetActive(false);
     }
 
-    void PlayerFinished()
-    {
-        playerController.runningSpeed = 0f;
-        transform.Rotate(transform.rotation.x, 180, transform.rotation.y, Space.Self);
-    }
-
-
-    public void AddCoin()
-    {
-        score++;
-        CoinText.text = "Score: " + score.ToString();
-
-    }
 }

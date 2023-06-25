@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float runningSpeed;
@@ -10,9 +11,13 @@ public class PlayerController : MonoBehaviour
     public float xSpeed;
     public float limitx;
 
+    // Added new codes
+    public Animator PlayerAnim;
+    public GameObject Player;
+
     void Start()
     {
-
+        //PlayerAnim = Player.GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
